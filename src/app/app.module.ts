@@ -11,6 +11,10 @@ import { ProfileComponent } from './components/user/profile/profile.component';
 import { AdminLoginComponent } from './components/admin/admin-login/admin-login.component';
 import { UserLoginComponent } from './components/user/user-login/user-login.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TransformUrlInterceptor } from './interceptors/transform-url.interceptor';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 @NgModule({
   declarations: [
@@ -26,9 +30,13 @@ import { DashboardComponent } from './components/admin/dashboard/dashboard.compo
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: TransformUrlInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
