@@ -5,3 +5,15 @@ export interface User {
     password: string
     image: string
 }
+
+export interface userProfile {
+    userDetails: User
+}
+
+export interface appUsers {
+    allUsers: User[]
+}
+
+export interface AuthState{
+    isAuthenticated: boolean
+}

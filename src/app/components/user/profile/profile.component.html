@@ -1,2 +1,17 @@
 <app-user-nav></app-user-nav>
-<p>profile works!</p>
+
+<div>
+    <div style="display: flex; width: 100%; justify-content: center; margin-bottom: 30px;">
+      <input type="file" name="image" (change)="onFileSelected($event)">
+      <button class="btn btn-warning" (click)="onSubmit()">Upload</button>    
+    </div>
+    <div class="d-flex" style="width: 100%; justify-content: center;">
+      <div style="background-color: burlywood; width: 200px; height: 200px; margin-right: 20px;">
+        <img [src]='"http://localhost:3000/images/"+img' alt="User Profile" width="200px" height="200px">
+      </div>
+      <div style="font-family: Georgia, 'Times New Roman', Times, serif;">
+        <p>Name: {{name}}</p>
+        <p>Email: {{email}}</p>
+      </div>
+    </div>
+</div>

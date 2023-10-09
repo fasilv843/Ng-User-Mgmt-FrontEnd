@@ -1,10 +1,10 @@
 <app-user-nav></app-user-nav>
 <div class="d-flex justify-content-center">
     <form [formGroup]="form" (submit)="onSubmit()" class="form-signin col-4">
-        <h1 class="h3 mb-3 fw-normal text-center">Login</h1>
+        <h1 class="h3 mb-3 fw-normal text-center">Sign Up</h1>
         <input formControlName="name" class="form-control my-2" placeholder="Name" required>
         <input formControlName="email" type="email" class="form-control my-2" placeholder="Email" required>
         <input formControlName="password" type="password" class="form-control my-2" placeholder="Password" required>
-        <button class="w-100 btn btn-lg btn-primary my-3" type="submit">Sign In</button>
+        <button class="w-100 btn btn-lg btn-primary my-3" type="submit">Sign Up</button>
     </form>
 </div>

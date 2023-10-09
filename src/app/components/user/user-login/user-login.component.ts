@@ -2,8 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { Emitters } from 'src/app/emitters/emitters';
 import Swal from 'sweetalert2';
+// import * as AuthActions from 'src/app/states/auth/auth.actions';
 
 @Component({
   selector: 'app-user-login',
@@ -16,7 +18,8 @@ export class UserLoginComponent implements OnInit {
   constructor(
     private formBuilder:FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private store: Store
   ){}
 
   ngOnInit(): void {
@@ -58,9 +61,12 @@ export class UserLoginComponent implements OnInit {
     }else if(!this.ValidateEmail(user.email)){
       Swal.fire("Error","Please Enter a valid email",'error')
     }else{
-      this.http.post('login',user, {withCredentials:true})
+      this.http.post('user/login',user, {withCredentials:true})
       .subscribe(
-        (res) => this.router.navigate(['/']),
+        (res) =>{ 
+          // this.store.dispatch(AuthActions.loginSuccess())
+          this.router.navigate(['/'])
+        },
         (err) => Swal.fire("Error",err.error.message,"error")
       )
     }

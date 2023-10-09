@@ -1,1 +1,9 @@
-<p>admin-login works!</p>
+
+<div class="container d-flex flex-column justify-content-center align-items-center mt-5">
+    <form [formGroup]="form" (submit)="onSubmit()" class="form-signin col-4">
+        <h1 class="h3 my-3 fw-normal text-center">Admin Login</h1>
+        <input formControlName="email" type="email" class="form-control my-2" placeholder="Email" required>
+        <input formControlName="password" type="password" class="form-control my-2" placeholder="Password" required>
+        <button class="w-100 btn btn-lg btn-primary my-3" type="submit">Log In</button>
+    </form>
+</div>

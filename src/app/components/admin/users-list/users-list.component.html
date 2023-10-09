@@ -1,0 +1,29 @@
+<app-admin-nav></app-admin-nav>
+
+<div class="form-signin">
+    <h3>Users List</h3>
+    <input type="text" placeholder="Search" class="input">
+  </div>
+  <div class="container">
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">SI</th>
+          <th scope="col">Profile</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="( userData$ | async) as userdata">
+        <tr *ngFor="let item of userdata; let i = index">
+          <td>{{i+1}}</td>
+          <td><img class="rounded-circle" [src]='"http://localhost:3000/file/"+item.image' alt="User Profile" width="40px" height="40px"></td>
+          <td>{{item.name}}</td>
+          <td>{{item.email}}</td>
+          <td><button class="btn btn-warning" (click)="editUser(item._id)">Edit</button></td>
+          <td><button class="btn btn-danger" (click)="deleteUser(item._id)">Delete</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
