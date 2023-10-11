@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Emitters } from 'src/app/emitters/emitters';
+import { hasFormErrors } from '../../helpers/form.validation.helper';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 })
 export class AdminLoginComponent implements OnInit {
   form: FormGroup;
+  isSubmitted = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -20,48 +21,52 @@ export class AdminLoginComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
+
     this.form = this.formBuilder.group({
-      email: '',
-      password: ''
+      email: ['', Validators.required, Validators.email ],
+      password: ['', Validators.required ]
     })
+
     this.http.get('admin/active',{withCredentials:true})
     .subscribe(
-      (res:any)=>{
+      ()=>{
         this.router.navigate(['/admin/dashboard'])
-        Emitters.authEmitter.emit(true);
       },
       (err)=>{
         this.router.navigate(['/admin'])
-        Emitters.authEmitter.emit(false);
       }
     )
+
   }
 
-  ValidateEmail = (email: string) => {
-    const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    if (email.match(validRegex)) {  
-      return true;
-    } else {
-      return false;
-    }
+  get f(){
+    return this.form.controls;
   }
 
   onSubmit(): void {
-    const admin = this.form.getRawValue();
-
-    if(admin.email == "" || admin.password == ""){
-      Swal.fire("Error","Please enter all the fields","error");
-    }else if(!this.ValidateEmail(admin.email)){
-      Swal.fire("Error","Please enter a valid email","error");
+    this.isSubmitted = true;
+    // console.log(this.form.controls);
+    
+    
+    if(hasFormErrors(this.form)){
+      Swal.fire("Check Inputs",'Enter all input fields fields properly',"warning");
     }else{
-      this.http.post('admin/login',admin,{
-        withCredentials:true
-      }).subscribe((res)=>this.router.navigate(['/admin/dashboard']),
-      (err)=>{
-        Swal.fire("Error",err.error.message,"error");
-      }
+      const admin = this.form.getRawValue();
+      console.log(admin);
+      
+      this.http.post('admin/login',admin,{withCredentials:true}).subscribe(
+        () => { 
+          localStorage.setItem('isAdminLoggedIn','true');
+          this.router.navigate(['/admin/dashboard'])
+        },
+        (err)=>{
+          console.log(err);
+          
+          Swal.fire("Error",err.error.message,"error");
+        }
       )
     }
+
   }
 
 }

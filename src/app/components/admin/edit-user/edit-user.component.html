@@ -1,1 +1,11 @@
-<p>edit-user works!</p>
+<app-admin-nav></app-admin-nav>
+<form [formGroup]="form" (submit)="onSubmit()" class="form-signin">
+  <h1 class="h3 mb-3 fw-normal">Edit profile</h1>
+  
+  <input formControlName="name" class="form-control" type="text" value="{{userName}}" required>
+  <div *ngIf="isSubmitted && f['name'].errors">
+    <div *ngIf="f['name'].errors['required']" style="color: red;">Name is required</div>
+  </div>
+
+  <button class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+</form>

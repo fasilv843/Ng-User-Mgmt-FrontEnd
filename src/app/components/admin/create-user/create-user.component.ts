@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { hasFormErrors } from '../../helpers/form.validation.helper';
 
 @Component({
   selector: 'app-create-user',
@@ -11,6 +12,7 @@ import Swal from 'sweetalert2';
 })
 export class CreateUserComponent implements OnInit {
   form: FormGroup;
+  isSubmitted = false;
 
   constructor(
     private http: HttpClient,
@@ -20,43 +22,36 @@ export class CreateUserComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      name: "",
-      email: "",
-      password: ""
+      name: ["", Validators.required],
+      email: ["", Validators.required, Validators.email ],
+      password: ["", Validators.required]
     })
   }
 
-  validateEmail = (email: string) => {
-    const validRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    if (email.match(validRegex)) {
-      return true;
-    } else {
-      return false;
-    }
+  get f(){
+    return this.form.controls;
   }
 
   onSubmit(){
-    const user = this.form.getRawValue()
-    console.log(user,'user details that passed to back end');
-    
-    if(user.name == "" || user.email == "" || user.password == "") {
-      Swal.fire("Error","Please enter all fields","error")
-    }else if(!this.validateEmail(user.email)){
-      Swal.fire("Error","Please enter a valid email","error");
+    // const user = this.form.getRawValue()
+    this.isSubmitted = true
+    // console.log(user,'user details that passed to back end');
+    // console.log(this.form.controls,'Form controls');
+
+
+    if(hasFormErrors(this.form)){
+      Swal.fire("Check Inputs",'Enter all input fields fields properly',"warning");
     }else{
-      this.http.post('admin/createUser',user,{ withCredentials:true })
-      .subscribe(
-        () =>{ 
-          this.router.navigate(['admin/usersList'])
-          Swal.fire("Added","New User added successfully","success");
-        },
-        (err) => {
-          console.log(err);
-          
+
+      const user = this.form.getRawValue();
+      this.http.post('admin/createUser',user,{withCredentials:true}).subscribe(
+        () => this.router.navigate(['/admin/usersList']),
+        (err)=>{
           Swal.fire("Error",err.error.message,"error");
         }
       )
     }
+
   }
 
 }

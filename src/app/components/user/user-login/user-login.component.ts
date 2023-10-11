@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Emitters } from 'src/app/emitters/emitters';
 import Swal from 'sweetalert2';
+import { hasFormErrors } from '../../helpers/form.validation.helper';
 // import * as AuthActions from 'src/app/states/auth/auth.actions';
 
 @Component({
@@ -14,6 +15,7 @@ import Swal from 'sweetalert2';
 })
 export class UserLoginComponent implements OnInit {
   form: FormGroup;
+  isSubmitted = false;
 
   constructor(
     private formBuilder:FormBuilder,
@@ -25,8 +27,8 @@ export class UserLoginComponent implements OnInit {
   ngOnInit(): void {
 
     this.form = this.formBuilder.group({
-      email:'',
-      password:''
+      email:['', Validators.required, Validators.email ],
+      password:['', Validators.required]
     })
 
     this.http.get('user',{withCredentials:true})
@@ -42,35 +44,30 @@ export class UserLoginComponent implements OnInit {
     );
 
   }
-
-  ValidateEmail = (email: string) => {
-    const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    if (email.match(validRegex)) {  
-      return true;
-    } else {
-      return false;
-    }
+  
+  get f(){
+    return this.form.controls;
   }
 
-  onSubmit(){
-    const user = this.form.getRawValue()
-    console.log(user);
-
-    if(user.email == '' || user.password == ''){
-      Swal.fire("Error","Please enter all the fields",'error')
-    }else if(!this.ValidateEmail(user.email)){
-      Swal.fire("Error","Please Enter a valid email",'error')
+  onSubmit(): void {
+    this.isSubmitted = true;
+    // console.log(this.form.controls);
+    
+    if(hasFormErrors(this.form)){
+      Swal.fire("Check Inputs",'Enter all input fields fields properly',"warning");
     }else{
-      this.http.post('user/login',user, {withCredentials:true})
-      .subscribe(
-        (res) =>{ 
-          // this.store.dispatch(AuthActions.loginSuccess())
-          this.router.navigate(['/'])
+      const user = this.form.getRawValue();
+      this.http.post('user/login',user,{withCredentials:true}).subscribe(
+        () => {
+          localStorage.setItem('isUserLoggedIn','true');
+          this.router.navigate(['/']);
         },
-        (err) => Swal.fire("Error",err.error.message,"error")
+        (err)=>{
+          Swal.fire("Error",err.error.message,"error");
+        }
       )
     }
-    
+
   }
 
 }

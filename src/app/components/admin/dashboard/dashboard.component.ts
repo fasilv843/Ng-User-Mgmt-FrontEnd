@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Emitters } from 'src/app/emitters/emitters';
+// import { Emitters } from 'src/app/emitters/emitters';
 import { User } from 'src/app/models/user.model';
 
 @Component({

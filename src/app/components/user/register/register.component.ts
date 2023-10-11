@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { hasFormErrors } from '../../helpers/form.validation.helper';
 
 @Component({
   selector: 'app-register',
@@ -12,6 +13,7 @@ import Swal from 'sweetalert2';
 export class RegisterComponent implements OnInit {
 
   form: FormGroup;
+  isSubmitted = false
 
   constructor(
     private formBuilder: FormBuilder,
@@ -21,35 +23,37 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      name: '',
-      email: '',
-      password:''
+      name: ['', Validators.required ],
+      email: ['', Validators.required, Validators.email ],
+      password:['', Validators.required ]
     })
   }
 
-  ValidateEmail = (email: string) => {
-    const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    if(email.match(validRegex)) {
-      return true;
-    } else {
-      return false;
-    }
+  
+  get f(){
+    return this.form.controls;
   }
 
-  onSubmit(){
-    const user = this.form.getRawValue()
 
-    if(user.name == "" || user.email == "" || user.password == ""){
-      Swal.fire("Error","Please enter all the fields","error");
-    }else if(!this.ValidateEmail(user.email)){
-      Swal.fire("Error","Please enter a valid email","error");
+  onSubmit(): void {
+    this.isSubmitted = true;
+    // console.log(this.form.controls);
+    
+    if(hasFormErrors(this.form)){
+      Swal.fire("Check Inputs",'Enter all input fields fields properly',"warning");
     }else{
-      this.http.post('user/register',user,{ withCredentials:true })
-      .subscribe(
-        () => this.router.navigate(['/']),
-        (err) => Swal.fire("Error",err.error.message,"error")
+      const user = this.form.getRawValue();
+      this.http.post('user/register',user,{withCredentials:true}).subscribe(
+        () => {
+          localStorage.setItem('isUserLoggedIn','true');
+          this.router.navigate(['/']);
+        },
+        (err)=>{
+          Swal.fire("Error",err.error.message,"error");
+        }
       )
     }
+
   }
 
 }

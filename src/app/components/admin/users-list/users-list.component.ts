@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { Emitters } from 'src/app/emitters/emitters';
+// import { Emitters } from 'src/app/emitters/emitters';
 import { User } from 'src/app/models/user.model';
 import { retrievePost } from 'src/app/states/user/user.actions';
 import { uniqueEmail } from 'src/app/states/user/user.selectors';
@@ -14,6 +14,11 @@ import Swal from 'sweetalert2';
   styleUrls: ['./users-list.component.css']
 })
 export class UsersListComponent implements OnInit {
+
+  filteredUsers: User[];
+  users: User[];
+  searchText: string;
+
   constructor(
     private http: HttpClient,
     private store: Store<{allUsers:User[]}>,
@@ -35,6 +40,14 @@ export class UsersListComponent implements OnInit {
         this.router.navigate(['/admin']);
       }
     )
+
+    this.userData$.subscribe((data) => {
+      console.log(data);
+      
+      this.users = data;
+      this.filteredUsers = [...data];
+    });
+
   }
 
   editUser(userId:string){
@@ -53,4 +66,18 @@ export class UsersListComponent implements OnInit {
       }
     )
   }
+
+  search(): void {
+    
+    if (!this.searchText) {
+      this.filteredUsers = [...this.users];
+      return;
+    }
+  
+    this.filteredUsers = this.users.filter((user) =>
+      user.name.toLowerCase().includes(this.searchText.toLowerCase())
+    );
+  }
+
+
 }

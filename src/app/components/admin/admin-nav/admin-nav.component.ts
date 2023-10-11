@@ -25,6 +25,7 @@ export class AdminNavComponent implements OnInit {
   onLogout(){
     this.http.post('admin/logout',{},{ withCredentials:true }).subscribe(
       () => {
+        localStorage.removeItem('isAdminLoggedIn')
         this.router.navigate(['/admin'])
       }
     );

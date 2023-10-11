@@ -45,6 +45,7 @@ import { AdminRoutingModule } from './components/admin/admin-login/admin.routing
     AdminRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
+    FormsModule,
     StoreModule.forRoot({
       userDetails:profileReducer,
       allUsers: postReducer

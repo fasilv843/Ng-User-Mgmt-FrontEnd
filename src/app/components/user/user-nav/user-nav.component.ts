@@ -1,9 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-// import { Store } from '@ngrx/store';
 import { Emitters } from 'src/app/emitters/emitters';
-// import * as AuthActions from 'src/app/states/auth/auth.actions';
-// import { Observable } from 'rxjs'
 
 @Component({
   selector: 'app-user-nav',
@@ -16,7 +13,6 @@ export class UserNavComponent implements OnInit, OnDestroy {
 
   constructor( 
     private http: HttpClient,
-    // private store: Store
   ){}
 
   ngOnInit(): void {
@@ -26,25 +22,19 @@ export class UserNavComponent implements OnInit, OnDestroy {
       console.log(auth, 'auth from ngOnInit of event subscription');
       this.isAuthenticated = auth;
     });
-    // this.isAuthenticated = this.store.select(isAuthenticated);
-    // this.isAuthenticated.subscribe((auth:boolean) => {
-    //   this.isAuthenticated = auth
-    // })
   }
 
   ngOnDestroy(): void {
     console.log('OnDestroy Invoked');
-    
-    // Emitters.authEmitter.unsubscribe()
-    // this.isAuthenticated.
   }
 
   logout(){
     this.http.post(`user/logout`,{},{ withCredentials: true }).subscribe(
-      () => this.isAuthenticated = false
-      // () => this.store.dispatch(AuthActions.logout())
+      () => {
+        localStorage.removeItem('isUserLoggedIn');
+        this.isAuthenticated = false
+      }
     );
-    // this.isAuthenticated = false
   }
 
 }

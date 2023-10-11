@@ -1,10 +1,15 @@
 <app-admin-nav></app-admin-nav>
 
 <div class="form-signin">
-    <h3>Users List</h3>
-    <input type="text" placeholder="Search" class="input">
+    <h3 class="text-center">Users List</h3>
+</div>
+<div class=" ">
+  <div class="input-group d-flex align-items-center justify-content-center my-3">
+    <input [ngStyle]="{ 'height' : '38px' }" placeholder="Search" type="text" [(ngModel)]="searchText" class="input" (input)="search()" >
+    <!-- <button class="btn btn-outline-secondary" type="button" (click)="search()">Search</button> -->
   </div>
-  <div class="container">
+</div>
+<div class="container">
     <table class="table">
       <thead class="thead-dark">
         <tr>
@@ -15,15 +20,15 @@
           <th scope="col">Action</th>
         </tr>
       </thead>
-      <tbody *ngIf="( userData$ | async) as userdata">
-        <tr *ngFor="let item of userdata; let i = index">
+      <tbody *ngIf="filteredUsers.length">
+        <tr *ngFor="let user of filteredUsers; let i = index">
           <td>{{i+1}}</td>
-          <td><img class="rounded-circle" [src]='"http://localhost:3000/file/"+item.image' alt="User Profile" width="40px" height="40px"></td>
-          <td>{{item.name}}</td>
-          <td>{{item.email}}</td>
-          <td><button class="btn btn-warning" (click)="editUser(item._id)">Edit</button></td>
-          <td><button class="btn btn-danger" (click)="deleteUser(item._id)">Delete</button></td>
+          <td><img class="rounded-circle" [src]='"http://localhost:3000/file/"+user.image' alt="User Profile" width="40px" height="40px"></td>
+          <td>{{user.name}}</td>
+          <td>{{user.email}}</td>
+          <td><button class="btn btn-warning" (click)="editUser(user._id)">Edit</button></td>
+          <td><button class="btn btn-danger" (click)="deleteUser(user._id)">Delete</button></td>
         </tr>
       </tbody>
     </table>
-  </div>
+</div>
