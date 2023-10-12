@@ -5,30 +5,40 @@ import { DashboardComponent } from "../dashboard/dashboard.component";
 import { UsersListComponent } from "../users-list/users-list.component";
 import { EditUserComponent } from "../edit-user/edit-user.component";
 import { CreateUserComponent } from "../create-user/create-user.component";
-import { AuthGuardComponent } from "src/app/guards/auth.guard";
+import { AdminAuthGuardComponent } from "src/app/guards/admin.auth.guard";
+import { AdminLoginGuard } from "src/app/guards/admin.login.guard";
 
 const routes: Routes = [
-    {path:'admin', component: AdminLoginComponent},
+    {
+        path:'admin', 
+        component: AdminLoginComponent,
+        canActivate: [AdminLoginGuard]
+    },
     {
         path: 'admin',
         children: [
             {
                 path:'dashboard', 
-                // canActivate:[AuthGuardComponent],
-                // loadChildren: () => import('../dashboard/dashboard.module').then(m=> m.DashboardModule)
-                component: DashboardComponent
+                component: DashboardComponent,
+                canActivate: [AdminAuthGuardComponent]
             },
             {
                 path: 'usersList', 
-                component: UsersListComponent
+                component: UsersListComponent,
+                canActivate: [AdminAuthGuardComponent]
+
             },
             {
                 path: 'editUser/:id', 
-                component: EditUserComponent
+                component: EditUserComponent,
+                canActivate: [AdminAuthGuardComponent]
+
             },
             {
                 path: 'createUser', 
-                component:CreateUserComponent 
+                component:CreateUserComponent ,
+                canActivate: [AdminAuthGuardComponent]
+
             }
         ]
     }

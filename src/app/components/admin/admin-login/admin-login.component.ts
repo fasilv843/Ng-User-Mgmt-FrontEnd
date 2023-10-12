@@ -27,15 +27,17 @@ export class AdminLoginComponent implements OnInit {
       password: ['', Validators.required ]
     })
 
-    this.http.get('admin/active',{withCredentials:true})
-    .subscribe(
-      ()=>{
-        this.router.navigate(['/admin/dashboard'])
-      },
-      (err)=>{
-        this.router.navigate(['/admin'])
-      }
-    )
+    // this.http.get('admin/active',{withCredentials:true})
+    // .subscribe(
+    //   ()=>{
+    //     console.log('in login');
+        
+    //     this.router.navigate(['/admin/dashboard'])
+    //   },
+    //   (err)=>{
+    //     this.router.navigate(['/admin'])
+    //   }
+    // )
 
   }
 

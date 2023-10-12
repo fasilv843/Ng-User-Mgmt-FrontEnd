@@ -20,6 +20,8 @@ export class DashboardComponent implements OnInit {
     .subscribe(
       (res : User) => {
         // Emitters.authEmitter.emit(true)
+        console.log('dashboard');
+        
         this.adminName = res.name;
       },
       (err) => this.router.navigate(['/admin'])
