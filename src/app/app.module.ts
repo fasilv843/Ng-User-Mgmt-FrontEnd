@@ -18,7 +18,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { userEffects } from './states/user/user.effects';
-import { postReducer, profileReducer } from './states/user/user.reduce';
+import { usersReducer, profileReducer } from './states/user/user.reduce';
 import { UsersListComponent } from './components/admin/users-list/users-list.component';
 import { EditUserComponent } from './components/admin/edit-user/edit-user.component';
 import { CreateUserComponent } from './components/admin/create-user/create-user.component';
@@ -48,7 +48,7 @@ import { AdminRoutingModule } from './components/admin/admin-login/admin.routing
     FormsModule,
     StoreModule.forRoot({
       userDetails:profileReducer,
-      allUsers: postReducer
+      allUsers: usersReducer
     }),
     EffectsModule.forRoot([userEffects])
   ],

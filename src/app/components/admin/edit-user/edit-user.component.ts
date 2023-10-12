@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import Swal from 'sweetalert2';
-import { hasFormErrors } from '../../helpers/form.validation.helper';
+import { hasFormErrors } from '../../../helpers/form.validation.helper';
 
 @Component({
   selector: 'app-edit-user',

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { hasFormErrors } from '../../helpers/form.validation.helper';
+import { hasFormErrors } from '../../../helpers/form.validation.helper';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -46,7 +46,6 @@ export class AdminLoginComponent implements OnInit {
   onSubmit(): void {
     this.isSubmitted = true;
     // console.log(this.form.controls);
-    
     
     if(hasFormErrors(this.form)){
       Swal.fire("Check Inputs",'Enter all input fields fields properly',"warning");

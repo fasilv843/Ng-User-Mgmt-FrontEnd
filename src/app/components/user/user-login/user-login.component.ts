@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Emitters } from 'src/app/emitters/emitters';
 import Swal from 'sweetalert2';
-import { hasFormErrors } from '../../helpers/form.validation.helper';
+import { hasFormErrors } from '../../../helpers/form.validation.helper';
 // import * as AuthActions from 'src/app/states/auth/auth.actions';
 
 @Component({

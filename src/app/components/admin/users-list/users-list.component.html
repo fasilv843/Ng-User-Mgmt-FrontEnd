@@ -23,7 +23,10 @@
       <tbody *ngIf="filteredUsers.length">
         <tr *ngFor="let user of filteredUsers; let i = index">
           <td>{{i+1}}</td>
-          <td><img class="rounded-circle" [src]='"http://localhost:3000/file/"+user.image' alt="User Profile" width="40px" height="40px"></td>
+          <td>
+            <p *ngIf="!user.image">N/A</p>
+            <img *ngIf="user.image" class="rounded-circle" [src]='"http://localhost:3000/images/"+user.image' alt="User Profile" width="40px" height="40px">
+          </td>
           <td>{{user.name}}</td>
           <td>{{user.email}}</td>
           <td><button class="btn btn-warning" (click)="editUser(user._id)">Edit</button></td>

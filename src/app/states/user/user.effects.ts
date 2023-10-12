@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { UserService } from 'src/app/services/user.service';
-import { retreivePostSuccess, retreiveProfileSuccess, retrievePost, retrieveProfile } from './user.actions';
+import { retreiveUsersSuccess, retreiveProfileSuccess, retrieveUsers, retrieveProfile } from './user.actions';
 import { User } from 'src/app/models/user.model';
 import { switchMap, map } from 'rxjs'
 
@@ -26,10 +26,10 @@ export class userEffects{
 
     loadAllUsers$ = createEffect( () => 
         this.actions$.pipe(
-            ofType(retrievePost),
+            ofType(retrieveUsers),
             switchMap( () => {
                 return this.userService.laodUsers().pipe(
-                    map((data) => retreivePostSuccess({allUsers: data as User[]}))
+                    map((data) => retreiveUsersSuccess({allUsers: data as User[]}))
                 )
             })
         )

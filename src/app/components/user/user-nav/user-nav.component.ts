@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Emitters } from 'src/app/emitters/emitters';
 
 @Component({
@@ -7,7 +7,7 @@ import { Emitters } from 'src/app/emitters/emitters';
   templateUrl: './user-nav.component.html',
   styleUrls: ['./user-nav.component.css']
 })
-export class UserNavComponent implements OnInit, OnDestroy {
+export class UserNavComponent implements OnInit {
 
   isAuthenticated = false
 
@@ -16,16 +16,11 @@ export class UserNavComponent implements OnInit, OnDestroy {
   ){}
 
   ngOnInit(): void {
-    console.log('OnInit Invoked');
+    // console.log('OnInit Invoked');
     
     Emitters.authEmitter.subscribe((auth: boolean) => {
-      console.log(auth, 'auth from ngOnInit of event subscription');
       this.isAuthenticated = auth;
     });
-  }
-
-  ngOnDestroy(): void {
-    console.log('OnDestroy Invoked');
   }
 
   logout(){

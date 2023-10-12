@@ -11,7 +11,7 @@ export const userProfileSelector = createSelector(
 )
 
 export const userRootSelector = (state:appUsers)=> state.allUsers;
-export const uniqueEmail = createSelector(
+export const usersSelector = createSelector(
   userRootSelector,
   (allusers:User[])=>{
     console.log(allusers);

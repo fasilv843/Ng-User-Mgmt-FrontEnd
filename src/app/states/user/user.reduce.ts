@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { User } from "src/app/models/user.model";
-import { retreivePostSuccess, retreiveProfileSuccess } from "./user.actions";
+import { retreiveUsersSuccess, retreiveProfileSuccess } from "./user.actions";
 // import { state } from "@angular/animations";
 
 
@@ -23,17 +23,17 @@ export function profileReducer(state:any, action: any){
     return _ProfileReducer(state, action)
 }
 
-/////////////////////////////////////////////////////////////
+//------------------------------------------------------------//
 
 export const initialState: User[] = [];
 
-const _PostReducer = createReducer(
+const _UsersReducer = createReducer(
     initialState,
-    on(retreivePostSuccess, (state, {allUsers}) => {
+    on(retreiveUsersSuccess, (state, {allUsers}) => {
         return [...allUsers]
     })
 );
 
-export function postReducer(state: any, action:any){
-    return _PostReducer(state,action);
+export function usersReducer(state: User[], action:any){
+    return _UsersReducer(state,action);
 }

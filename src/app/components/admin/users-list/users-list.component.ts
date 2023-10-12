@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 // import { Emitters } from 'src/app/emitters/emitters';
 import { User } from 'src/app/models/user.model';
-import { retrievePost } from 'src/app/states/user/user.actions';
-import { uniqueEmail } from 'src/app/states/user/user.selectors';
+import { retrieveUsers } from 'src/app/states/user/user.actions';
+import { usersSelector } from 'src/app/states/user/user.selectors';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -24,24 +24,15 @@ export class UsersListComponent implements OnInit {
     private store: Store<{allUsers:User[]}>,
     private router: Router
   ){}
-
-  userData$ = this.store.pipe(select(uniqueEmail));
+    
+  userData$ = this.store.pipe(select(usersSelector));
 
 
   ngOnInit(): void {
-    this.http.get('admin/usersList',{ withCredentials: true })
-    .subscribe(
-      (data) => {
-        console.log(data);
-        this.store.dispatch(retrievePost())
-      },
-      (err) => {
-        console.log(err,'error while fetching users list');
-        this.router.navigate(['/admin']);
-      }
-    )
 
-    this.userData$.subscribe((data) => {
+    this.store.dispatch(retrieveUsers())
+
+    this.userData$.subscribe((data:User[]) => {
       console.log(data);
       
       this.users = data;
@@ -58,7 +49,7 @@ export class UsersListComponent implements OnInit {
     this.http.post(`admin/deleteUser/${userId}`,{},{withCredentials: true})
     .subscribe(
       () => {
-        this.store.dispatch(retrievePost())
+        this.store.dispatch(retrieveUsers())
         Swal.fire('Success',"User Deleted Successfully",'success');
       },
       (err) => {
@@ -68,7 +59,7 @@ export class UsersListComponent implements OnInit {
   }
 
   search(): void {
-    
+
     if (!this.searchText) {
       this.filteredUsers = [...this.users];
       return;
