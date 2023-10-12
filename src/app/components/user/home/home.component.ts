@@ -9,16 +9,14 @@ import { User } from 'src/app/models/user.model';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  userName = ''
 
   constructor(private http: HttpClient){}
 
   ngOnInit(): void {
     this.http.get('user',{ withCredentials:true })
     .subscribe(
-      (res:User) => {
+      () => {
         Emitters.authEmitter.emit(true)
-        this.userName = res.name
       },
       (err) => {
         Emitters.authEmitter.emit(false)
@@ -28,4 +26,3 @@ export class HomeComponent implements OnInit {
 
 }
 
-//////any used in res, remove after project completion

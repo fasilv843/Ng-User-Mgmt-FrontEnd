@@ -30,7 +30,7 @@
           <td>{{user.name}}</td>
           <td>{{user.email}}</td>
           <td><button class="btn btn-warning" (click)="editUser(user._id)">Edit</button></td>
-          <td><button class="btn btn-danger" (click)="deleteUser(user._id)">Delete</button></td>
+          <td><button class="btn btn-danger" (click)="confirmDelete(user._id)">Delete</button></td>
         </tr>
       </tbody>
     </table>

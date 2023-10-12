@@ -21,7 +21,6 @@ export class UserLoginComponent implements OnInit {
     private formBuilder:FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private store: Store
   ){}
 
   ngOnInit(): void {
@@ -33,7 +32,7 @@ export class UserLoginComponent implements OnInit {
 
     this.http.get('user',{withCredentials:true})
     .subscribe(
-      (res:any) => {
+      () => {
         this.router.navigate(['/'])
         Emitters.authEmitter.emit(true)
       },
@@ -51,15 +50,17 @@ export class UserLoginComponent implements OnInit {
 
   onSubmit(): void {
     this.isSubmitted = true;
-    // console.log(this.form.controls);
     
     if(hasFormErrors(this.form)){
       Swal.fire("Check Inputs",'Enter all input fields fields properly',"warning");
     }else{
       const user = this.form.getRawValue();
       this.http.post('user/login',user,{withCredentials:true}).subscribe(
-        () => {
+        (res) => {
+          console.log(res);
+          // const token = res.token;
           localStorage.setItem('isUserLoggedIn','true');
+          // localStorage.setItem('accessToken': res.token )
           this.router.navigate(['/']);
         },
         (err)=>{

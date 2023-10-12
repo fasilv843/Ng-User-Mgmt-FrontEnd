@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
+import { SweetAlert2LoaderService } from '@sweetalert2/ngx-sweetalert2';
 // import { Emitters } from 'src/app/emitters/emitters';
 import { User } from 'src/app/models/user.model';
 import { retrieveUsers } from 'src/app/states/user/user.actions';
@@ -22,7 +23,8 @@ export class UsersListComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private store: Store<{allUsers:User[]}>,
-    private router: Router
+    private router: Router,
+    private sweetAlertService: SweetAlert2LoaderService
   ){}
     
   userData$ = this.store.pipe(select(usersSelector));
@@ -45,17 +47,39 @@ export class UsersListComponent implements OnInit {
     this.router.navigate(['/admin/editUser',userId])
   }
 
-  deleteUser(userId:string){
-    this.http.post(`admin/deleteUser/${userId}`,{},{withCredentials: true})
-    .subscribe(
-      () => {
-        this.store.dispatch(retrieveUsers())
-        Swal.fire('Success',"User Deleted Successfully",'success');
-      },
-      (err) => {
-        this.router.navigate(['/admin'])
+  confirmDelete(userId:string){
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You won\'t be able to revert this!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.http.post(`admin/deleteUser/${userId}`,{},{withCredentials: true})
+        .subscribe(
+          () => {
+            this.store.dispatch(retrieveUsers())
+          },
+          (err) => {
+            this.router.navigate(['/admin'])
+          }
+        )
+
+        Swal.fire(
+          'Deleted!',
+          'User has been deleted.',
+          'success'
+        );
+
       }
-    )
+    });
+
+
   }
 
   search(): void {

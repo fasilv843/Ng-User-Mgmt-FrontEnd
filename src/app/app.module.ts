@@ -23,6 +23,7 @@ import { UsersListComponent } from './components/admin/users-list/users-list.com
 import { EditUserComponent } from './components/admin/edit-user/edit-user.component';
 import { CreateUserComponent } from './components/admin/create-user/create-user.component';
 import { AdminRoutingModule } from './components/admin/admin-login/admin.routing';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { AdminRoutingModule } from './components/admin/admin-login/admin.routing
       userDetails:profileReducer,
       allUsers: usersReducer
     }),
-    EffectsModule.forRoot([userEffects])
+    EffectsModule.forRoot([userEffects]),
+    SweetAlert2Module.forRoot()
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TransformUrlInterceptor, multi: true }
