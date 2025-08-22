@@ -41,5 +41,5 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# Project Secrets by Develpor @fasil
-/src/environments/environment.ts
+# custom Secrets
+# /src/environments/environment.ts
